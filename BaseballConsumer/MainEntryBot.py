@@ -8,11 +8,13 @@ the bot.
 """
 import json
 import discord
+import asyncio
 from BaseballConsumerV2 import BaseballUpdaterBotV2
 
 SETTINGS_FILE = './discordSettings.doNotUpload.json'
-
-client = discord.Client()
+intents = discord.Intents.default()
+intents.members = True
+client = discord.Client(intents=intents)
 # logging.basicConfig(level=logging.DEBUG)
 
 def read_settings():
@@ -66,5 +68,9 @@ async def on_ready():
 
 error_msg = read_settings()
 
-client.loop.create_task(my_background_task())
-client.run(DISCORD_TOKEN)
+
+async def main():
+    asyncio.create_task(my_background_task())
+    await client.start(DISCORD_TOKEN)
+
+asyncio.run(main())
